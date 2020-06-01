@@ -7,6 +7,7 @@
 
 using namespace std;
 
+long int System::numAcc = 0;
 
 void System::initAccount() {
     string in_name;
@@ -19,9 +20,9 @@ void System::initAccount() {
     Account acc(numAcc, in_name, in_password, in_address, 0);
     // insert new account to account map.
     accountMap.insert(make_pair(numAcc, acc));
-    // TODO : Store it in the fold
-
-    numAcc += 1;
+    // Show the info of the client
+    cout << "Sir. Your ID is "<<numAcc<<endl;
+    System::numAcc += 1;
 }
 
 bool System::searchAccount(long int id) {

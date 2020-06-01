@@ -22,6 +22,14 @@ string
 Account.h
 C:/Users/82734/Desktop/Bank_Systems/Account.h
 
+C:/Users/82734/Desktop/Bank_Systems/System.cpp
+iostream
+-
+System.h
+C:/Users/82734/Desktop/Bank_Systems/System.h
+Account.h
+C:/Users/82734/Desktop/Bank_Systems/Account.h
+
 C:/Users/82734/Desktop/Bank_Systems/System.h
 string
 -
@@ -33,16 +41,4 @@ Account.h
 C:/Users/82734/Desktop/Bank_Systems/Account.h
 Record.h
 C:/Users/82734/Desktop/Bank_Systems/Record.h
-
-C:/Users/82734/Desktop/Bank_Systems/main.cpp
-iostream
--
-string
--
-fstream
--
-io.h
--
-System.h
-C:/Users/82734/Desktop/Bank_Systems/System.h
 

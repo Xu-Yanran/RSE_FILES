@@ -15,9 +15,11 @@
 using namespace std;
 
 class System {
-    long int numAcc = 0;    // TODO: temp account ID
+//    long int numAcc = 0;    // TODO: temp account ID
     unordered_map<long int, Account> accountMap;
 public:
+    static long int numAcc;    // TODO: temp account ID
+    System() {};
     void initAccount();
     void deposit(int am);
     void withdraw(int am);

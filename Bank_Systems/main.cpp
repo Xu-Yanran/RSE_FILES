@@ -8,21 +8,32 @@
 using namespace std;
 
 int main() {
+    System bankSystem;
+
     // check if system data exits
     string sysPath = "C:\\Users\\82734\\Desktop\\Bank_Systems\\DataOfBank";    // TODO : note in the report
     if (0 != _access(sysPath.c_str(),0)) {
         // build the data fold and initialize the system if it is the first time.
-        string cmd = "mkdir -p " + sysPath;
+        string cmd = "mkdir " + sysPath;
         system(cmd.c_str());
         System bankSystem;      // todo: to check where it should be put
     } else {
         // read system data from fold
         // TODO: how to convert the file to bankSystem?
-
+        ifstream file("C:\\Users\\82734\\Desktop\\Bank_Systems\\DataOfBank\\sysData.txt",ios::out | ios::binary );
+        // TODO
+        if (!file.is_open()) {
+            cout<<"error";
+            return 0;
+        }
+        char* temp = new char[sizeof(System)];
+        System bankSystem = *(System*)(temp);
+        file.close();
+        cout<<"num:::::"<<bankSystem.numAcc;        // TODO
     }
 
-    // initialize a system
-    System bankSystem; //   todo: to be deleted
+//    // initialize a system
+//    System bankSystem; //   todo: to be deleted
 
     // check Account
     cout<<"Sir. Do you have an account?"<<endl<<"Please input Y/N"<<endl;
@@ -81,5 +92,10 @@ int main() {
         return 0;
     }
 
+    // save system data
+    ofstream file("C:\\Users\\82734\\Desktop\\Bank_Systems\\DataOfBank\\sysData.txt",ios::out | ios::binary );
+    file.write((char*)&bankSystem, sizeof(bankSystem));
+    file.close();
 
+    return 0;
 }
