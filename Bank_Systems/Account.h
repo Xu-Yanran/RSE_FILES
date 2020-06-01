@@ -21,7 +21,7 @@ private:
     string address;
     long int amount;
 
-    list<Record> recordList;        // TODO : here is the bug. But do not know why
+//    list<Record> recordList;        // TODO : here is the bug. But do not know why
 public:
     Account() {;}
     Account(long int id, string n, string p, string ad, long int am) {
