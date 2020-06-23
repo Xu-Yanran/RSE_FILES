@@ -5,6 +5,7 @@
 #ifndef BANKSYSTEM_ACCOUNT_H
 #define BANKSYSTEM_ACCOUNT_H
 
+# include <fstream>
 # include <string>
 # include <unordered_map>
 # include <list>
@@ -35,6 +36,7 @@ public:
     }
 
     string getPassword();
+    long int getAmount();
 };
 
 

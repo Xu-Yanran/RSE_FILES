@@ -23,8 +23,8 @@ public:
     void deposit(int am);
     void withdraw(int am);
     void inquire();
-    bool searchAccount(long int id);
-    bool checkPassword(long int id, string p);
+    bool searchAccount(string name);
+    bool checkPassword(string n, string p);
 };
 
 

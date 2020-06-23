@@ -4,11 +4,14 @@
 
 #include "System.h"
 # include <iostream>
+# include <fstream>
+# include <io.h>
 # include "Account.h"
 
 using namespace std;
 
 long int System::numAcc = 0;
+string sysPath = "C:\\Users\\82734\\Desktop\\BankSystem\\DataOfBank";
 
 void System::initAccount() {
     string in_name;
@@ -24,18 +27,34 @@ void System::initAccount() {
     // Show the info of the client
     cout << "Sir. Your ID is "<<numAcc<<endl;
     System::numAcc += 1;
+
+    // storage
+    // build a folder containing the info of cliend
+    string cmd = "mkdir " + sysPath + "\\" + in_name;
+    system(cmd.c_str());
+    // store the info into it.
+    ofstream osm(sysPath + "\\" + in_name + "\\info.txt", ios::out|ios::binary);
+    osm.write((char*)&acc,sizeof(Account));
+    osm.close();
 }
 
-bool System::searchAccount(long int id) {
-    return (accountMap.find(id) == accountMap.end());
+bool System::searchAccount(string name) {
+//    return (accountMap.find(name) == accountMap.end());
+    return (0 != _access((sysPath + "\\" + name).c_str(),0));
 }
 
-bool System::checkPassword(long int id, string p) {
-    // TODO bug is here
-    unordered_map<long int, Account>::iterator iter;
-    iter = accountMap.find(id);
-    return ((*iter).second.getPassword() == p);
-//    return (accountMap[id].getPassword() == p);   TODO: why this type is incorrect
+bool System::checkPassword(string n, string p) {
+//    // TODO bug is here
+//    unordered_map<long int, Account>::iterator iter;
+//    iter = accountMap.find(id);
+//    return ((*iter).second.getPassword() == p);
+////    return (accountMap[id].getPassword() == p);   TODO: why this type is incorrect
+    Account acc;
+    ifstream ism(sysPath + "\\" + n + "\\info.txt", ios::in|ios::binary);
+    ism.read((char*)&acc,sizeof(Account));
+    string pwd = acc.getPassword();
+    ism.close();
+    return (pwd == p);
 }
 
 void System::deposit(int am) {

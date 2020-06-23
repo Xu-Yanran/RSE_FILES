@@ -7,3 +7,7 @@
 string Account::getPassword() {
     return password;
 }
+
+long int Account::getAmount() {
+    return amount;
+}
