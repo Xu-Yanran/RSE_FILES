@@ -23,6 +23,7 @@ private:
 public:
     Record() {;}
     Record(long int id, string d, string t, long int a);
+    void display();
 
 };
 

@@ -76,16 +76,16 @@ int main() {
             cout<<"Sir. How much do you want to deposit?"<<endl;
             cin>>de_amount;
             // TODO
-            bankSystem.deposit(de_amount);
+            bankSystem.deposit(tmp_name, de_amount);
         } else if (cmd == "withdraw") {
             int wi_amount;
             cout<<"Sir. How much do you want to withdraw?"<<endl;
             cin>>wi_amount;
             // TODO
-            bankSystem.withdraw(wi_amount);
+            bankSystem.withdraw(tmp_name, wi_amount);
         } else if (cmd == "inquire") {
             // TODO
-            bankSystem.inquire();
+            bankSystem.inquire(tmp_name);
         } else {
             cout << "Sir. Please check the command." << endl;
             return 0;

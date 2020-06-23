@@ -7,6 +7,8 @@
 # include <fstream>
 # include <io.h>
 # include "Account.h"
+# include "Record.h"
+# include <ctime>
 
 using namespace std;
 
@@ -34,6 +36,8 @@ void System::initAccount() {
     // build a folder containing the info of cliend
     string cmd = "mkdir " + sysPath + "\\" + in_name;
     system(cmd.c_str());
+    string rcmd = "mkdir " + sysPath + "\\" + in_name + "\\" + "records";
+    system(rcmd.c_str());
     // store the info into it.
     ofstream osm(sysPath + "\\" + in_name + "\\info.txt", ios::out|ios::binary);
     osm.write((char*)&acc,sizeof(Account));
@@ -57,22 +61,67 @@ bool System::checkPassword(string n, string p) {
     char* pwd = acc.getPassword();
     cout<<"id: "<<acc.ID<<endl;
     cout<<"pass: "<< pwd<<endl;
+    cout<<"name: "<<acc.name<<endl;
     ism.close();
     return (pwd == p);
 }
 
-void System::deposit(int am) {
-    // TODO
+void System::deposit(string n, long int am) {
+    Account acc;
+    ifstream ism(sysPath + "\\" + n + "\\info.txt", ios::in|ios::binary);
+    ism.read((char*)&acc,sizeof(Account));
+    acc.changeAmount(am);
+    acc.addRecordAccount();
+    cout<<"Sir. Your balance is "<<acc.getAmount()<<endl;
+    ofstream osm(sysPath + "\\" + n + "\\info.txt", ios::out|ios::binary);
+    osm.write((char*)&acc,sizeof(Account));
+    osm.close();
 
-    ;
+    // store records.
+    time_t t = time(NULL);
+    char ch[64] = {0};
+    strftime(ch, sizeof(ch) - 1, "%Y-%m-%d %H:%M:%S", localtime(&t));
+    Record rec(acc.getRecordAccount(), ch, "deposit", am);
+    string tmp = to_string(acc.getRecordAccount());
+    rec.display();
+    ofstream rosm(sysPath + "\\" + n + "\\" + "records" + "\\" + tmp + ".txt", ios::out|ios::binary);
+    rosm.write((char*)&rec,sizeof(Record));
+    rosm.close();
 }
 
-void System::withdraw(int am) {
-    // TODO
-    ;
+void System::withdraw(string n, int am) {
+    Account acc;
+    ifstream ism(sysPath + "\\" + n + "\\info.txt", ios::in|ios::binary);
+    ism.read((char*)&acc,sizeof(Account));
+    if (am > acc.getAmount()) {
+        cout<<"Sir, your balance is insufficient.\n";
+        return;
+    } else {
+        acc.changeAmount(-am);
+        acc.addRecordAccount();
+        cout<<"Sir. Your balance is "<<acc.getAmount()<<endl;
+        ofstream osm(sysPath + "\\" + n + "\\info.txt", ios::out|ios::binary);
+        osm.write((char*)&acc,sizeof(Account));
+        osm.close();
+
+        // store records.
+        time_t t = time(NULL);
+        char ch[64] = {0};
+        strftime(ch, sizeof(ch) - 1, "%Y-%m-%d %H:%M:%S", localtime(&t));
+        Record rec(acc.getRecordAccount(), ch, "withdraw", am);
+        rec.display();
+        string tmp = to_string(acc.getRecordAccount());
+        ofstream rosm(sysPath + "\\" + n + "\\" + "records" + "\\" + tmp + ".txt", ios::out|ios::binary);
+        rosm.write((char*)&rec,sizeof(Record));
+        rosm.close();
+    }
 }
 
-void System::inquire() {
-    // TODO
-    ;
+void System::inquire(string n) {
+    Record rec;
+    for (int i = 1; !(0 != _access((sysPath + "\\" + n + "\\" + "records" + "\\" + (to_string(i)) + ".txt").c_str(),0)); i++) {
+        ifstream ism(sysPath + "\\" + n + "\\" + "records" + "\\" + to_string(i) + ".txt", ios::in | ios::binary);
+        ism.read((char *) &rec, sizeof(Record));
+        rec.display();
+    }
 }

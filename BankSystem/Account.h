@@ -24,7 +24,8 @@ public:
     char* password;
     char* address;
     long int amount;
-    char* test;
+
+    int recordCount = 0;
 
 //    list<Record> recordList;        // TODO : here is the bug. But do not know why
     Account() {;}
@@ -38,6 +39,9 @@ public:
 
     char* getPassword();
     long int getAmount();
+    void changeAmount(long int am);
+    int getRecordAccount();
+    void addRecordAccount();
 };
 
 

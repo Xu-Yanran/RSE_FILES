@@ -11,3 +11,15 @@ char* Account::getPassword() {
 long int Account::getAmount() {
     return amount;
 }
+
+void Account::changeAmount(long int am) {
+    amount += am;
+}
+
+int Account::getRecordAccount() {
+    return recordCount;
+}
+
+void Account::addRecordAccount() {
+    recordCount++;
+}

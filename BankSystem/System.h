@@ -20,9 +20,9 @@ public:
     static long int numAcc;    // TODO: temp account ID
     System() {};
     void initAccount();
-    void deposit(int am);
-    void withdraw(int am);
-    void inquire();
+    void deposit(string n, long int am);
+    void withdraw(string n, int am);
+    void inquire(string n);
     bool searchAccount(string name);
     bool checkPassword(string n, string p);
 };
