@@ -68,6 +68,7 @@ int main() {
 
         // input cmd
         cout << "Hello Sir. What can I do for you?" << endl;
+        cout << "deposit, withdraw or inquire?"<<endl;
         string cmd;
         cin >> cmd;
         if (cmd == "deposit") {

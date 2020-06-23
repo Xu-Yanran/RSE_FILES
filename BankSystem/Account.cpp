@@ -4,7 +4,7 @@
 
 #include "Account.h"
 
-string Account::getPassword() {
+char* Account::getPassword() {
     return password;
 }
 

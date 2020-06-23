@@ -18,16 +18,17 @@ using namespace std;
 
 class Account {
 private:
+public:
     long int ID;
-    string name;
-    string password;
-    string address;
+    char* name;
+    char* password;
+    char* address;
     long int amount;
+    char* test;
 
 //    list<Record> recordList;        // TODO : here is the bug. But do not know why
-public:
     Account() {;}
-    Account(long int id, string n, string p, string ad, long int am) {
+    Account(long int id, char* n, char* p, char* ad, long int am) {
         ID = id;
         name = n;
         password = p;
@@ -35,7 +36,7 @@ public:
         amount = am;
     }
 
-    string getPassword();
+    char* getPassword();
     long int getAmount();
 };
 

@@ -14,9 +14,10 @@ long int System::numAcc = 0;
 string sysPath = "C:\\Users\\82734\\Desktop\\BankSystem\\DataOfBank";
 
 void System::initAccount() {
-    string in_name;
-    string in_password;
-    string in_address;
+    string in_test;
+    char in_name[20];
+    char in_password[20];
+    char in_address[20];
     cout<<"That's alright, Sir. I will help to create an account."<<endl;
     cout<<"Please input your name"<<endl; cin>>in_name;
     cout<<"Please input your passwword"<<endl; cin>>in_password;
@@ -27,6 +28,7 @@ void System::initAccount() {
     // Show the info of the client
     cout << "Sir. Your ID is "<<numAcc<<endl;
     System::numAcc += 1;
+    acc.password = "123";       // TODO: the password cannot be implement properly
 
     // storage
     // build a folder containing the info of cliend
@@ -52,7 +54,9 @@ bool System::checkPassword(string n, string p) {
     Account acc;
     ifstream ism(sysPath + "\\" + n + "\\info.txt", ios::in|ios::binary);
     ism.read((char*)&acc,sizeof(Account));
-    string pwd = acc.getPassword();
+    char* pwd = acc.getPassword();
+    cout<<"id: "<<acc.ID<<endl;
+    cout<<"pass: "<< pwd<<endl;
     ism.close();
     return (pwd == p);
 }
