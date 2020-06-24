@@ -14,8 +14,9 @@ Record::Record(long int id, string d, string t, long int a) {
 }
 
 void Record::display() {
-    cout<<"ID: "<<ID<<endl;
-    cout<<"date: "<<date<<endl;
-    cout<<"type:"<<type<<endl;
-    cout<<"amount: "<<amount<<endl;
+    cout<<"###############################"<<endl;
+    cout<<"ID:          "<<ID<<endl;
+    cout<<"date:        "<<date<<endl;
+    cout<<"type:        "<<type<<endl;
+    cout<<"amount:      "<<amount<<endl;
 }

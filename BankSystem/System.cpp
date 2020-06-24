@@ -123,5 +123,6 @@ void System::inquire(string n) {
         ifstream ism(sysPath + "\\" + n + "\\" + "records" + "\\" + to_string(i) + ".txt", ios::in | ios::binary);
         ism.read((char *) &rec, sizeof(Record));
         rec.display();
+        ism.close();
     }
 }

@@ -13,28 +13,10 @@ int main() {
     // check if system data exits
     string sysPath = "C:\\Users\\82734\\Desktop\\BankSystem\\DataOfBank";    // TODO : note in the report
     if (0 != _access(sysPath.c_str(),0)) {
-//        cout<<"build the system"<<endl;
         // build the data fold and initialize the system if it is the first time.
         string cmd = "mkdir " + sysPath;
         system(cmd.c_str());
-        System bankSystem;      // todo: to check where it should be put
     }
-//    else {
-//        // read system data from fold
-//        // TODO: how to convert the file to bankSystem?
-//        ifstream file("C:\\Users\\82734\\Desktop\\BankSystem\\DataOfBank\\sysData.txt",ios::out | ios::binary );
-//        // TODO
-//        if (!file.is_open()) {
-//            cout<<"error";
-//            return 0;
-//        }
-//        char* temp = new char[sizeof(System)];
-//        System bankSystem = *(System*)(temp);
-////        file.close();
-//        bankSystem.numAcc++;
-//        cout<<"num:::::"<<bankSystem.numAcc;        // TODO
-//    }
-
 
     // check Account
     cout<<"Sir. Do you have an account?"<<endl<<"Please input Y/N"<<endl;
@@ -75,16 +57,13 @@ int main() {
             int de_amount;
             cout<<"Sir. How much do you want to deposit?"<<endl;
             cin>>de_amount;
-            // TODO
             bankSystem.deposit(tmp_name, de_amount);
         } else if (cmd == "withdraw") {
             int wi_amount;
             cout<<"Sir. How much do you want to withdraw?"<<endl;
             cin>>wi_amount;
-            // TODO
             bankSystem.withdraw(tmp_name, wi_amount);
         } else if (cmd == "inquire") {
-            // TODO
             bankSystem.inquire(tmp_name);
         } else {
             cout << "Sir. Please check the command." << endl;
@@ -94,11 +73,5 @@ int main() {
         cout<<"Sir. The command is Error."<<endl;
         return 0;
     }
-
-    // save system data
-    ofstream file("C:\\Users\\82734\\Desktop\\BankSystem\\DataOfBank\\sysData.txt",ios::out | ios::binary );
-    file.write((char*)&bankSystem, sizeof(bankSystem));
-    file.close();
-
     return 0;
 }
