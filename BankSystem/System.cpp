@@ -9,6 +9,7 @@
 # include "Account.h"
 # include "Record.h"
 # include <ctime>
+# include <sstream>
 
 using namespace std;
 
@@ -30,7 +31,6 @@ void System::initAccount() {
     // Show the info of the client
     cout << "Sir. Your ID is "<<numAcc<<endl;
     System::numAcc += 1;
-    acc.password = "123";       // TODO: the password cannot be implement properly
 
     // storage
     // build a folder containing the info of cliend
@@ -39,8 +39,9 @@ void System::initAccount() {
     string rcmd = "mkdir " + sysPath + "\\" + in_name + "\\" + "records";
     system(rcmd.c_str());
     // store the info into it.
-    ofstream osm(sysPath + "\\" + in_name + "\\info.txt", ios::out|ios::binary);
-    osm.write((char*)&acc,sizeof(Account));
+    ofstream osm(sysPath + "\\" + in_name + "\\info.csv", ios::out);
+//    osm.write((char*)&acc,sizeof(Account));
+    osm<<System::numAcc<<","<<in_name<<","<<in_password<<","<<in_address<<","<<0<<","<<acc.recordCount;
     osm.close();
 }
 
@@ -50,79 +51,115 @@ bool System::searchAccount(string name) {
 }
 
 bool System::checkPassword(string n, string p) {
-//    // TODO bug is here
-//    unordered_map<long int, Account>::iterator iter;
-//    iter = accountMap.find(id);
-//    return ((*iter).second.getPassword() == p);
-////    return (accountMap[id].getPassword() == p);   TODO: why this type is incorrect
-    Account acc;
-    ifstream ism(sysPath + "\\" + n + "\\info.txt", ios::in|ios::binary);
-    ism.read((char*)&acc,sizeof(Account));
-    char* pwd = acc.getPassword();
-    cout<<"id: "<<acc.ID<<endl;
-    cout<<"pass: "<< pwd<<endl;
-    cout<<"name: "<<acc.name<<endl;
+    ifstream ism(sysPath + "\\" + n + "\\info.csv", ios::in);
+    string accInfo[6];
+    string tmpInfo;
+    string wholeInfo;
+    int count = 0;
+    while(std::getline(ism, wholeInfo))
+    {
+        istringstream is(wholeInfo);
+        while(std::getline(is, tmpInfo, ','))
+        {
+            accInfo[count] = tmpInfo;
+            count++;
+        }
+    }
     ism.close();
-    return (pwd == p);
+    return (accInfo[2] == p);
 }
 
 void System::deposit(string n, long int am) {
-    Account acc;
-    ifstream ism(sysPath + "\\" + n + "\\info.txt", ios::in|ios::binary);
-    ism.read((char*)&acc,sizeof(Account));
-    acc.changeAmount(am);
-    acc.addRecordAccount();
-    cout<<"Sir. Your balance is "<<acc.getAmount()<<endl;
-    ofstream osm(sysPath + "\\" + n + "\\info.txt", ios::out|ios::binary);
-    osm.write((char*)&acc,sizeof(Account));
+    ifstream ism(sysPath + "\\" + n + "\\info.csv", ios::in);
+    string accInfo[6];
+    string tmpInfo;
+    string wholeInfo;
+    int count = 0;
+    while(std::getline(ism, wholeInfo))
+    {
+        istringstream is(wholeInfo);
+        while(std::getline(is, tmpInfo, ','))
+        {
+            accInfo[count] = tmpInfo;
+            count++;
+        }
+    }
+    ism.close();
+    ofstream osm(sysPath + "\\" + n + "\\info.csv", ios::out);
+    osm<<accInfo[0]<<","<<accInfo[1]<<","<<accInfo[2]<<","<<accInfo[3]<<","<<stol(accInfo[4])+am<<","<<stol(accInfo[5])+1;
     osm.close();
 
     // store records.
     time_t t = time(NULL);
     char ch[64] = {0};
     strftime(ch, sizeof(ch) - 1, "%Y-%m-%d %H:%M:%S", localtime(&t));
-    Record rec(acc.getRecordAccount(), ch, "deposit", am);
-    string tmp = to_string(acc.getRecordAccount());
+    Record rec(stol(accInfo[5])+1, ch, "deposit", am);
+    string tmp = to_string(stol(accInfo[5])+1);
     rec.display();
-    ofstream rosm(sysPath + "\\" + n + "\\" + "records" + "\\" + tmp + ".txt", ios::out|ios::binary);
-    rosm.write((char*)&rec,sizeof(Record));
+    ofstream rosm(sysPath + "\\" + n + "\\" + "records" + "\\" + tmp + ".csv", ios::out);
+    rosm<<stol(accInfo[5])+1<<","<<ch<<","<<"deposit"<<","<<am;
     rosm.close();
 }
 
 void System::withdraw(string n, int am) {
-    Account acc;
-    ifstream ism(sysPath + "\\" + n + "\\info.txt", ios::in|ios::binary);
-    ism.read((char*)&acc,sizeof(Account));
-    if (am > acc.getAmount()) {
+    ifstream ism(sysPath + "\\" + n + "\\info.csv", ios::in);
+    string accInfo[6];
+    string tmpInfo;
+    string wholeInfo;
+    int count = 0;
+    while(std::getline(ism, wholeInfo))
+    {
+        istringstream is(wholeInfo);
+        while(std::getline(is, tmpInfo, ','))
+        {
+            accInfo[count] = tmpInfo;
+            count++;
+        }
+    }
+    ism.close();
+    if (am > stol(accInfo[4])) {
         cout<<"Sir, your balance is insufficient.\n";
         return;
     } else {
-        acc.changeAmount(-am);
-        acc.addRecordAccount();
-        cout<<"Sir. Your balance is "<<acc.getAmount()<<endl;
-        ofstream osm(sysPath + "\\" + n + "\\info.txt", ios::out|ios::binary);
-        osm.write((char*)&acc,sizeof(Account));
+        ofstream osm(sysPath + "\\" + n + "\\info.csv", ios::out);
+        osm<<accInfo[0]<<","<<accInfo[1]<<","<<accInfo[2]<<","<<accInfo[3]<<","<<stol(accInfo[4])-am<<","<<stol(accInfo[5])+1;
         osm.close();
 
         // store records.
         time_t t = time(NULL);
         char ch[64] = {0};
         strftime(ch, sizeof(ch) - 1, "%Y-%m-%d %H:%M:%S", localtime(&t));
-        Record rec(acc.getRecordAccount(), ch, "withdraw", am);
+        Record rec(stol(accInfo[5])+1, ch, "withdraw", am);
+        string tmp = to_string(stol(accInfo[5])+1);
         rec.display();
-        string tmp = to_string(acc.getRecordAccount());
-        ofstream rosm(sysPath + "\\" + n + "\\" + "records" + "\\" + tmp + ".txt", ios::out|ios::binary);
-        rosm.write((char*)&rec,sizeof(Record));
+        ofstream rosm(sysPath + "\\" + n + "\\" + "records" + "\\" + tmp + ".csv", ios::out);
+        rosm<<stol(accInfo[5])+1<<","<<ch<<","<<"withdraw"<<","<<am;
         rosm.close();
     }
 }
 
 void System::inquire(string n) {
-    Record rec;
-    for (int i = 1; !(0 != _access((sysPath + "\\" + n + "\\" + "records" + "\\" + (to_string(i)) + ".txt").c_str(),0)); i++) {
-        ifstream ism(sysPath + "\\" + n + "\\" + "records" + "\\" + to_string(i) + ".txt", ios::in | ios::binary);
-        ism.read((char *) &rec, sizeof(Record));
-        rec.display();
+    string accInfo[4];
+    string tmpInfo;
+    string wholeInfo;
+    int count = 0;
+    for (int i = 1; !(0 != _access((sysPath + "\\" + n + "\\" + "records" + "\\" + (to_string(i)) + ".csv").c_str(),0)); i++)
+    {
+        ifstream ism(sysPath + "\\" + n + "\\" + "records" + "\\" + to_string(i) + ".csv", ios::in);
+        while(std::getline(ism, wholeInfo))
+        {
+            istringstream is(wholeInfo);
+            while(std::getline(is, tmpInfo, ','))
+            {
+                accInfo[count] = tmpInfo;
+                count++;
+            }
+        }
         ism.close();
+        cout<<"###############################"<<endl;
+        cout<<"ID:          "<<accInfo[0]<<endl;
+        cout<<"date:        "<<accInfo[1]<<endl;
+        cout<<"type:        "<<accInfo[2]<<endl;
+        cout<<"amount:      "<<accInfo[3]<<endl;
     }
 }
