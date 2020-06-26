@@ -5,11 +5,12 @@
 #include "Record.h"
 #include <iostream>
 
-Record::Record(long int id, string d, string t, long int a) {
+Record::Record(long int id, string d, string t, long int a, string m) {
     ID = id;
     date = d;
     type = t;
     amount = a;
+    manager = m;
 //    client = c;
 }
 
@@ -19,4 +20,5 @@ void Record::display() {
     cout<<"date:        "<<date<<endl;
     cout<<"type:        "<<type<<endl;
     cout<<"amount:      "<<amount<<endl;
+    cout<<"manager:     "<<manager<<endl;
 }

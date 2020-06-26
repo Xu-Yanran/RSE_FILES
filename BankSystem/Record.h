@@ -19,10 +19,11 @@ private:
     string date;
     string type;
     long int amount;
+    string manager;
 //    Account *client;      //TODO: add a client
 public:
     Record() {;}
-    Record(long int id, string d, string t, long int a);
+    Record(long int id, string d, string t, long int a, string m);
     void display();
 
 };
